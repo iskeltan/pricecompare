@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Register</title>
+  </head>
+  <body>
+    {{if .Success}}
+     {{.Message}}
+     {{if .NewUser }}
+     {{ .NewUser }}
+     {{end}}
+    {{else}}
+      {{.Message}}
+    <form class="" action="/profiles/register" method="post">
+      <label for="email">email: </label>
+      <input type="text" name="email" value="" placeholder="E-Mail"> <br>
+      <label for="password">password: </label>
+      <input type="password" name="password" value="" placeHolder="Password"> <br>
+      <label for="password_again">password (again): </label>
+      <input type="password" name="password_again" value="" placeHolder="Password (Again)"> <br>
+      <input type="submit" name="register" value="Register Now">
+    </form>
+    {{end}}
+  </body>
+</html>
