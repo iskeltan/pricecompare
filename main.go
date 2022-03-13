@@ -9,27 +9,32 @@ import (
 	"./middleware"
 	"./models"
 	"./views"
+	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
 )
 
+// HeaderMenuItem is blabla
 type HeaderMenuItem struct {
 	Name string `json:name`
 	Url  string `json:url`
 }
 
+// IndexData is blabla
 type IndexData struct {
 	HeaderMenuItems []HeaderMenuItem
+	ActiveUser      interface{}
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
 	//fmt.Println("jello")
 
 	// tmpl := template.Must(template.ParseFiles("templates/index.html"))
-
+	fmt.Print(context.Get(r, "User"))
 	headerMenu := HeaderMenuItem{Name: "Register", Url: "/profiles/register"}
 
 	IndexData := IndexData{}
 	IndexData.HeaderMenuItems = append(IndexData.HeaderMenuItems, headerMenu)
+	IndexData.ActiveUser = context.Get(r, "User")
 	IndexJSON, err := json.Marshal(IndexData)
 
 	if err != nil {
@@ -45,6 +50,7 @@ func detail(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	const PORT = "4000"
 	// ROUTER NOTES: https://gowebexamples.com/routes-using-gorilla-mux/
 	r := mux.NewRouter()
 
@@ -62,7 +68,7 @@ func main() {
 	fs := http.FileServer(http.Dir("static/"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	models.Migrate()
-	log.Print("[+] server is ready")
-	http.ListenAndServe(":4000", r)
+	log.Print("[+] server is ready on :" + PORT)
+	http.ListenAndServe(":"+PORT, r)
 
 }
